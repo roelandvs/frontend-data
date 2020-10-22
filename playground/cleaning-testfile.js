@@ -1,6 +1,6 @@
 
 let surveyData = data;
-console.log("survey data:", surveyData);
+// console.log("survey data:", surveyData);
 
 // let oogKleurAntwoord = [];
 
@@ -36,8 +36,12 @@ for (kleurHex of oogKleurAntwoord) {
 }
 
 for (kleurHex of onjuisteHexWaardes) {
-	if (kleurHex.length === 6) {
+	//parseInt gebruikt hier een haxadecimale base. deze gaat tot 16, de radix is dus 16. Parseint zet de hex code om tot een geheel getal.
+	//Als dit dus een correcte hex is zonder '#' dan is dit getal. Gebruik parseInt was tip van Jonah
+	if (kleurHex.length === 6 && parseInt(kleurHex.slice(0, 2), 16) <= 255) {
+		onjuisteHexWaardes.pop(kleurHex);
 		juisteHexWaardes.push('#'.concat(kleurHex));
+		console.log(kleurHex);
 	}
 }
 
