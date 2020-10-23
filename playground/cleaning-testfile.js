@@ -36,29 +36,37 @@ for (kleurHex of oogKleurAntwoord) {
 	} else if (kleurHex.length === 6 && parseInt(kleurHex.slice(0, 2), 16) <= 255) {
 		juisteHexWaardes.push('#'.concat(kleurHex));
 	} else if (kleurHex.includes('RGB') === true) { 
-		console.log(kleurHex.match(/(\d[\d\.]*)/g);
+		//regEx die alle getallen uit kleurHex haalt. \d = digit, []wat daarna mag komen, *herhaal eeuwig totdat '[]'' niet klopt.
+		let RgbKleur = kleurHex.match(/(\d[\d]*)/g);
+		RgbKleur = RgbKleur.map(kleur => Number(kleur))
+
+		juisteHexWaardes.push(rgbToHex(RgbKleur[0], RgbKleur[1], RgbKleur[2]));
 	} else {
 		onjuisteHexWaardes.push(kleurHex);
 	};
 };
 
+//https://www.w3docs.com/snippets/javascript/how-to-convert-rgb-to-hex-and-vice-versa.html between "----"
+//----
 function componentToHex(c) {
   let hex = c.toString(16);
-  // return hex.length == 1 ? "0" + hex : hex;
+
   if (hex.length == 1) {
-  	"0" + hex;
+  	hex = "0" + hex;
+  } else {
+  	hex;
   };
 
-  return hex;
-}
+  return hex.toUpperCase();
+};
 
 function rgbToHex(r, g, b) {
   return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
-}
-// console.log(rgbToHex(28, 135, 201)); // #1c89c9
+};
+//-----
 
-// console.log('juiste waardes:', juisteHexWaardes);
+console.log('juiste waardes:', juisteHexWaardes);
 console.log('onjuiste waardes:', onjuisteHexWaardes);
 
 
-//https://www.w3docs.com/snippets/javascript/how-to-convert-rgb-to-hex-and-vice-versa.html
+
