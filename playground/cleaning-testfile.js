@@ -6,19 +6,19 @@ let surveyData = data;
 
 //for loop
 // for (var i = 0; i < surveyData.length; i++) {
-// 	oogKleurAntwoord.push(surveyData[i].oogKleur);
+// 	oogKleurAntwoord.push(surveyData[i].oogKleur.toUpperCase().replace(/ /g, ''));
 // };
 
 //for-in loop
 // for (answer in surveyData) {
-// 	oogKleurAntwoord.push(surveyData[answer].oogKleur);
-// }
+// 	oogKleurAntwoord.push(surveyData[answer].oogKleur.toUpperCase().replace(/ /g, ''));
+// };
 //for-in is een andere manier van een normale for loop schrijven waarbij 'let answer' dient als een vervanging van i
 
 //for-of loop
 // for (answer of surveyData) {
-// 	oogKleurAntwoord.push(answer.oogKleur);
-// }
+// 	oogKleurAntwoord.push(answer.oogKleur.toUpperCase().replace(/ /g, ''));
+// };
 //bij for-of dient answer niet als een cijfer die loopt door het object, maar weergeeft het gelijk de waardes, die je kunt aanpassen
 
 const oogKleurAntwoord = surveyData.map(answer => answer.oogKleur.toUpperCase().replace(/ /g, ''));
@@ -38,7 +38,7 @@ for (kleurHex of oogKleurAntwoord) {
 	} else if (kleurHex.includes('RGB') === true) { 
 		//regEx die alle getallen uit kleurHex haalt. \d = digit, []wat daarna mag komen, *herhaal eeuwig totdat '[]'' niet klopt.
 		let RgbKleur = kleurHex.match(/(\d[\d]*)/g);
-		RgbKleur = RgbKleur.map(kleur => Number(kleur))
+		RgbKleur = RgbKleur.map(kleur => Number(kleur));
 
 		juisteHexWaardes.push(rgbToHex(RgbKleur[0], RgbKleur[1], RgbKleur[2]));
 	} else {
@@ -46,7 +46,7 @@ for (kleurHex of oogKleurAntwoord) {
 	};
 };
 
-//https://www.w3docs.com/snippets/javascript/how-to-convert-rgb-to-hex-and-vice-versa.html between "----"
+//between "----" code from https://www.w3docs.com/snippets/javascript/how-to-convert-rgb-to-hex-and-vice-versa.html
 //----
 function componentToHex(c) {
   let hex = c.toString(16);
