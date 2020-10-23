@@ -1,6 +1,5 @@
 
 let surveyData = data;
-// console.log("survey data:", surveyData);
 
 // let oogKleurAntwoord = [];
 
@@ -30,17 +29,17 @@ let onjuisteHexWaardes = [];
 for (kleurHex of oogKleurAntwoord) {
 	if (kleurHex.startsWith('#') === true && kleurHex.length === 7 && parseInt(kleurHex.slice(1, 3), 16) <= 255) {
 		//parseInt gebruikt hier een haxadecimale base. deze gaat tot 16, de radix is dus 16. Parseint zet de hex code om tot een geheel getal.
-		//Als dit dus een correcte hex is zonder '#' dan is dit getal. Gebruik parseInt was tip van Jonah
+		//Als dit dus een correcte hex is zonder '#' dan is dit getal onder de 255 (FF). Gebruik parseInt was tip van Jonah
 		//Dit zou je beter kunnen checken met regEx, maar heb nu al dit
 		juisteHexWaardes.push(kleurHex);
 	} else if (kleurHex.length === 6 && parseInt(kleurHex.slice(0, 2), 16) <= 255) {
 		juisteHexWaardes.push('#'.concat(kleurHex));
 	} else if (kleurHex.includes('RGB') === true) { 
 		//regEx die alle getallen uit kleurHex haalt. \d = digit, []wat daarna mag komen, *herhaal eeuwig totdat '[]'' niet klopt.
-		let RgbKleur = kleurHex.match(/(\d[\d]*)/g);
-		RgbKleur = RgbKleur.map(kleur => Number(kleur));
+		let rgbKleur = kleurHex.match(/(\d[\d]*)/g);
+		rgbKleur = rgbKleur.map(kleur => Number(kleur));
 
-		juisteHexWaardes.push(rgbToHex(RgbKleur[0], RgbKleur[1], RgbKleur[2]));
+		juisteHexWaardes.push(rgbToHex(rgbKleur[0], rgbKleur[1], rgbKleur[2]));
 	} else {
 		onjuisteHexWaardes.push(kleurHex);
 	};
