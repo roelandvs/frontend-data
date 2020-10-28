@@ -26,6 +26,8 @@ git clone https://github.com/roelandvs/functional-programming.git
 
 The files containing the code are located in the playground directory.
 
+## Research questions
+[Questions](https://github.com/roelandvs/functional-programming/wiki/Parkeer-vragen)
 
 ## Sources
 - [RGB to Hex](https://www.w3docs.com/snippets/javascript/how-to-convert-rgb-to-hex-and-vice-versa.html)
