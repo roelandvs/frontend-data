@@ -7,12 +7,11 @@ const endpoints = [
 	"https://opendata.rdw.nl/resource/nsk3-v9n7.json?$limit=6500"
 ];
 
-const specificColumn = "areaid";
 const usefullColumns = ["areaid", "capacity", "disabledaccess"];
 
 getData(endpoints)
 	.then(response => makeJSON(response))
-	.then(RDWData => filterObject(RDWData[0], usefullColumns))
+	.then(RDWData => filterObject(RDWData, usefullColumns))
 	// .then waarbij de objecten worden samengevoegd
 	.then(console.log)
 
@@ -30,10 +29,19 @@ function makeJSON(response) {
 //returns objects with only the usefull values. It makes objects with only the keys I use
 function filterObject(RDWArray, columnNames) {
 	return RDWArray.map(entry => {
+		console.log(entry);
+		//ik moet hier nog een map gaan gebruiken om in de endpoints te komen
+
 		//Jonah Meijers heeft me geholpen met deze code
 		//-----
 		let newEntry = {};
-		columnNames.forEach(column => newEntry[column] = entry[column]);
+
+		columnNames.forEach(column => {
+			if (entry[column]) {
+				newEntry[column] = entry[column];
+			}
+		})
+		
 		return newEntry;
 		//-----
 	})
