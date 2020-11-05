@@ -12,8 +12,8 @@ const usefullColumns = ["areaid", "capacity", "disabledaccess", "areadesc"];
 getData(endpoints)
 	.then(response => makeJSON(response))
 	.then(RDWData => filterEntries(RDWData, usefullColumns))
-	// .then(RDWFilteredData => console.log(RDWFilteredData[0]))
-	.then(console.log)
+	.then(RDWFilteredData => mergeObjects(RDWFilteredData))
+	// .then(console.log)
 
 //returnt de url met een promise.all 
 function getData(urls) {
@@ -47,13 +47,20 @@ function filterEntries(RDWArray, columnNames) {
 };
 
 function mergeObjects(dataSet) {
-	dataSet.map(endpoint => {
-		// console.log('endpoint: ', endpoint);
+	let accessDataset = dataSet[0];
+	let locationDataset = dataSet[1];
 
-		endpoint.map(entry => {
-			// console.log('entry', entry.areaid);
-		})
+	accessDataset.map(entry => {
+		//vergelijkt id's van beide datasets, en als deze overeenkomen bewaard hij ze
+		const locationItem = locationDataset.find(item => item.areaid === entry.areaid);
 
+		if (locationItem) {
+			const mergedItem = {...entry, ...locationItem};
+			if (mergedItem.disabledaccess == 1) {
+				console.log(mergedItem);
+			}
+			return mergedItem;
+		}
 	})
 };
 
