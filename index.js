@@ -4,7 +4,6 @@
 // const endpointTwo = "https://opendata.rdw.nl/resource/nsk3-v9n7.json?$limit=6500"; 
 const endpoints = [
 	"https://opendata.rdw.nl/resource/b3us-f26s.json?$limit=2000", 
-	// "https://opendata.rdw.nl/resource/t5pc-eb34.json"
 	"https://opendata.rdw.nl/resource/nsk3-v9n7.json?$limit=7000"
 ];
 
