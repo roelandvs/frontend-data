@@ -15,8 +15,17 @@ const usefullColumns = [
 	"areamanagerid"
 ];
 
+//---- dit is om de API te testen 
 import dotenv from 'dotenv'
-console.log(process.env.API_KEY);
+
+fetchAPI('https://api.opencagedata.com/geocode/v1/json?q=51.921013802+4.534210677&key=' + process.env.API_KEY)
+	.then(response => response.json())
+	.then(data => console.log('data van API', data.results[0].components))
+
+function fetchAPI(url) {
+	return fetch(url);
+};
+// ----
 
 getData(endpoints)
 	.then(response => makeJSON(response))
