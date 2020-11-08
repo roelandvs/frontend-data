@@ -7,12 +7,21 @@ const endpoints = [
 	"https://opendata.rdw.nl/resource/nsk3-v9n7.json?$limit=7000"
 ];
 
-const usefullColumns = ["areaid", "capacity", "disabledaccess", "areageometryastext", "areamanagerid"];
+const usefullColumns = [
+	"areaid", 
+	"capacity", 
+	"disabledaccess", 
+	"areageometryastext", 
+	"areamanagerid"
+];
+
+import dotenv from 'dotenv'
+console.log(process.env.API_KEY);
 
 getData(endpoints)
 	.then(response => makeJSON(response))
 	.then(RDWData => filterEntries(RDWData, usefullColumns))
-	.then(RDWFilteredData => mergeObjects(RDWFilteredData))
+	.then(RDWFilteredEntries => mergeObjects(RDWFilteredEntries))
 	.then(RDWSingleObject => filterGeoLocations(RDWSingleObject))
 	.then(console.log)
 

@@ -4,3 +4,4 @@ playground/survey-info.js
 playground/college-api
 dist/
 .cache/
+.env
