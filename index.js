@@ -1,7 +1,7 @@
 
 //endpoint naar SPECIFICATIES PARKEERGEBIED + limit van 2000 items
-// const endpoint = "https://opendata.rdw.nl/resource/b3us-f26s.json?$limit=2000";
-// const endpointTwo = "https://opendata.rdw.nl/resource/nsk3-v9n7.json?$limit=6500"; 
+// stads naam in dataset = data.results[0].components 
+
 const endpoints = [
 	"https://opendata.rdw.nl/resource/b3us-f26s.json?$limit=2000", 
 	"https://opendata.rdw.nl/resource/nsk3-v9n7.json?$limit=7000"
@@ -20,7 +20,7 @@ import dotenv from 'dotenv'
 
 // fetchAPI('https://api.opencagedata.com/geocode/v1/json?q=51.921013802+4.534210677&key=' + process.env.API_KEY)
 // 	.then(response => response.json())
-// 	.then(data => console.log('data van API', data.results[0].components))
+
 
 // function fetchAPI(url) {
 // 	return fetch(url);
@@ -33,7 +33,7 @@ getData(endpoints)
 	.then(RDWFilteredEntries => mergeObjects(RDWFilteredEntries))
 	.then(RDWSingleObject => filterGeoLocations(RDWSingleObject))
 	.then(RDWFilteredObject => {
-		createAPIUrl(RDWFilteredObject);
+		// createAPIUrl(RDWFilteredObject);
 		return RDWFilteredObject;
 	})
 	// .then(console.log)
@@ -101,20 +101,41 @@ function filterGeoLocations(dataset) {
 	})
 };
 
+//----- code to get name from API
+
 // delayed forEach loop from https://travishorn.com/delaying-foreach-iterations-2ebd4b29ad30
-function createAPIUrl(dataset) {
-	dataset.forEach((entry, i) => {
-		setTimeout(() => {
-			const geoData = entry.areageometryastext[0] + '+' + entry.areageometryastext[1];
-			const APIUrl = 'https://api.opencagedata.com/geocode/v1/json?q=' + geoData + '&key=' + process.env.API_KEY;
-			fetchAPI(APIUrl);
-		}, i * 1200)
+// function createAPIUrl(dataset) {
+// 	dataset.forEach((entry, i) => {
+// 		setTimeout(() => {
+// 			const geoData = entry.areageometryastext[0] + '+' + entry.areageometryastext[1];
+// 			const APIUrl = 'https://api.opencagedata.com/geocode/v1/json?q=' + geoData + '&key=' + process.env.API_KEY;
+// 			fetchAPI(APIUrl);
+// 		}, i * 1300)
+// 	})
+// };
+
+let allAPIData = [];
+
+function fetchAPI(url) {
+	// console.log('url:', url);
+	const APIAnswer = fetch(url);
+	APIAnswer.then(answer => {
+		turnToJSON(answer);
+	});
+};
+
+function turnToJSON(answer) {
+	const answerJSON = answer.json();
+	answerJSON.then(answer => {
+		// console.log('answer JSON:', answer);
+		allAPIData.push(answer);
 	})
 };
 
-function fetchAPI(url) {
-	console.log(url);
-};
+console.log(allAPIData);
+
+fetchAPI('https://api.opencagedata.com/geocode/v1/json?q=53.244691432+6.529587617&key=782e1a761d424784ad800e41b142b8fa');
+//-----
 
 
 
