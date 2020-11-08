@@ -18,13 +18,13 @@ const usefullColumns = [
 //---- dit is om de API te testen 
 import dotenv from 'dotenv'
 
-fetchAPI('https://api.opencagedata.com/geocode/v1/json?q=51.921013802+4.534210677&key=' + process.env.API_KEY)
-	.then(response => response.json())
-	.then(data => console.log('data van API', data.results[0].components))
+// fetchAPI('https://api.opencagedata.com/geocode/v1/json?q=51.921013802+4.534210677&key=' + process.env.API_KEY)
+// 	.then(response => response.json())
+// 	.then(data => console.log('data van API', data.results[0].components))
 
-function fetchAPI(url) {
-	return fetch(url);
-};
+// function fetchAPI(url) {
+// 	return fetch(url);
+// };
 // ----
 
 getData(endpoints)
@@ -32,7 +32,11 @@ getData(endpoints)
 	.then(RDWData => filterEntries(RDWData, usefullColumns))
 	.then(RDWFilteredEntries => mergeObjects(RDWFilteredEntries))
 	.then(RDWSingleObject => filterGeoLocations(RDWSingleObject))
-	.then(console.log)
+	.then(RDWFilteredObject => {
+		createAPIUrl(RDWFilteredObject);
+		return RDWFilteredObject;
+	})
+	// .then(console.log)
 
 //returnt de url met een promise.all 
 function getData(urls) {
@@ -85,18 +89,32 @@ function mergeObjects(dataSet) {
 	}).filter(entry => entry != undefined)
 };
 
-function filterGeoLocations(dataSet) {
-	return dataSet.map(entry => {
+function filterGeoLocations(dataset) {
+	return dataset.map(entry => {
 		//RegEx is geschreven door Jonah Meijers
 		const geoLocation = entry.areageometryastext.match(/\d+\.\d+/g);
 		const longitude = geoLocation[0];
 		const latitude = geoLocation[1];
 
-		entry.areageometryastext = [longitude, latitude];
+		entry.areageometryastext = [latitude, longitude];
 		return entry;
 	})
 };
 
+// delayed forEach loop from https://travishorn.com/delaying-foreach-iterations-2ebd4b29ad30
+function createAPIUrl(dataset) {
+	dataset.forEach((entry, i) => {
+		setTimeout(() => {
+			const geoData = entry.areageometryastext[0] + '+' + entry.areageometryastext[1];
+			const APIUrl = 'https://api.opencagedata.com/geocode/v1/json?q=' + geoData + '&key=' + process.env.API_KEY;
+			fetchAPI(APIUrl);
+		}, i * 1200)
+	})
+};
+
+function fetchAPI(url) {
+	console.log(url);
+};
 
 
 
