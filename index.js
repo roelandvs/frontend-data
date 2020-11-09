@@ -94,8 +94,9 @@ function filterGeoLocations(dataset) {
 
 //----- code to get name from API
 
-// delayed forEach loop from https://travishorn.com/delaying-foreach-iterations-2ebd4b29ad30
+delayed forEach loop from https://travishorn.com/delaying-foreach-iterations-2ebd4b29ad30
 function createAPIUrl(dataset) {
+	console.log('het proces is gestart');
 	dataset.forEach((entry, i) => {
 		setTimeout(() => {
 			const geoData = entry.lat + '+' + entry.lng;
