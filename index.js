@@ -15,17 +15,7 @@ const usefullColumns = [
 	"areamanagerid"
 ];
 
-//---- dit is om de API te testen 
 import dotenv from 'dotenv'
-
-// fetchAPI('https://api.opencagedata.com/geocode/v1/json?q=51.921013802+4.534210677&key=' + process.env.API_KEY)
-// 	.then(response => response.json())
-
-
-// function fetchAPI(url) {
-// 	return fetch(url);
-// };
-// ----
 
 getData(endpoints)
 	.then(response => makeJSON(response))
@@ -93,10 +83,11 @@ function filterGeoLocations(dataset) {
 	return dataset.map(entry => {
 		//RegEx is geschreven door Jonah Meijers
 		const geoLocation = entry.areageometryastext.match(/\d+\.\d+/g);
-		const longitude = geoLocation[0];
-		const latitude = geoLocation[1];
+		const lng = geoLocation[0];
+		const lat = geoLocation[1];
 
-		entry.areageometryastext = [latitude, longitude];
+		entry.lng = lng;
+		entry.lat = lat;
 		return entry;
 	})
 };
@@ -104,17 +95,17 @@ function filterGeoLocations(dataset) {
 //----- code to get name from API
 
 // delayed forEach loop from https://travishorn.com/delaying-foreach-iterations-2ebd4b29ad30
-// function createAPIUrl(dataset) {
-// 	dataset.forEach((entry, i) => {
-// 		setTimeout(() => {
-// 			const geoData = entry.areageometryastext[0] + '+' + entry.areageometryastext[1];
-// 			const APIUrl = 'https://api.opencagedata.com/geocode/v1/json?q=' + geoData + '&key=' + process.env.API_KEY;
-// 			fetchAPI(APIUrl);
-// 		}, i * 1300)
-// 	})
-// };
+function createAPIUrl(dataset) {
+	dataset.forEach((entry, i) => {
+		setTimeout(() => {
+			const geoData = entry.lat + '+' + entry.lng;
+			const APIUrl = 'https://api.opencagedata.com/geocode/v1/json?q=' + geoData + '&key=' + process.env.API_KEY;
+			fetchAPI(APIUrl);
+		}, i * 2000)
+	})
+};
 
-let allAPIData = [];
+var allAPIData = [];
 
 function fetchAPI(url) {
 	// console.log('url:', url);
@@ -127,14 +118,20 @@ function fetchAPI(url) {
 function turnToJSON(answer) {
 	const answerJSON = answer.json();
 	answerJSON.then(answer => {
-		// console.log('answer JSON:', answer);
-		allAPIData.push(answer);
+		let cityInfo = answer.results[0].components;
+		let geometry = answer.results[0].geometry;
+
+		allAPIData.push({
+			cityInfo,
+			geometry
+		});
+
+		if (allAPIData.length >= 1003) {
+			console.log(allAPIData);
+		}
 	})
 };
 
-console.log(allAPIData);
-
-fetchAPI('https://api.opencagedata.com/geocode/v1/json?q=53.244691432+6.529587617&key=782e1a761d424784ad800e41b142b8fa');
 //-----
 
 
