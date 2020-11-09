@@ -15,18 +15,15 @@ const usefullColumns = [
 	"areamanagerid"
 ];
 
-import dotenv from 'dotenv'
+let geoData = data;
+console.log('geo data:', geoData);
 
 getData(endpoints)
 	.then(response => makeJSON(response))
 	.then(RDWData => filterEntries(RDWData, usefullColumns))
 	.then(RDWFilteredEntries => mergeObjects(RDWFilteredEntries))
 	.then(RDWSingleObject => filterGeoLocations(RDWSingleObject))
-	.then(RDWFilteredObject => {
-		// createAPIUrl(RDWFilteredObject);
-		return RDWFilteredObject;
-	})
-	// .then(console.log)
+	.then(RDWFilteredObject => console.log('RDW data: ', RDWFilteredObject))
 
 //returnt de url met een promise.all 
 function getData(urls) {
@@ -69,13 +66,9 @@ function mergeObjects(dataSet) {
 
 		if (locationItem) {
 			const mergedItem = {...entry, ...locationItem};
-
-			// if (mergedItem.disabledaccess == 1) {
-			// 	console.log('Inclusief disabledaccess: ', mergedItem);
-			// }
-
 			return mergedItem;
 		}
+
 	}).filter(entry => entry != undefined)
 };
 
@@ -91,49 +84,5 @@ function filterGeoLocations(dataset) {
 		return entry;
 	})
 };
-
-//----- code to get name from API
-
-delayed forEach loop from https://travishorn.com/delaying-foreach-iterations-2ebd4b29ad30
-function createAPIUrl(dataset) {
-	console.log('het proces is gestart');
-	dataset.forEach((entry, i) => {
-		setTimeout(() => {
-			const geoData = entry.lat + '+' + entry.lng;
-			const APIUrl = 'https://api.opencagedata.com/geocode/v1/json?q=' + geoData + '&key=' + process.env.API_KEY;
-			fetchAPI(APIUrl);
-		}, i * 2000)
-	})
-};
-
-var allAPIData = [];
-
-function fetchAPI(url) {
-	// console.log('url:', url);
-	const APIAnswer = fetch(url);
-	APIAnswer.then(answer => {
-		turnToJSON(answer);
-	});
-};
-
-function turnToJSON(answer) {
-	const answerJSON = answer.json();
-	answerJSON.then(answer => {
-		let cityInfo = answer.results[0].components;
-		let geometry = answer.results[0].geometry;
-
-		allAPIData.push({
-			cityInfo,
-			geometry
-		});
-
-		if (allAPIData.length >= 1003) {
-			console.log(allAPIData);
-		}
-	})
-};
-
-//-----
-
 
 
