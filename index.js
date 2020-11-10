@@ -1,6 +1,7 @@
 
 //endpoint naar SPECIFICATIES PARKEERGEBIED + limit van 2000 items
 // stads naam in dataset = data.results[0].components 
+import { data } from './geodata.js'
 
 const endpoints = [
 	"https://opendata.rdw.nl/resource/b3us-f26s.json?$limit=2000", 
@@ -15,8 +16,7 @@ const usefullColumns = [
 ];
 
 //geoData is data I saved locally that I reveived from an API
-let geoData = data;
-// console.log('geo data:', geoData);
+const geoData = data;
 
 getData(endpoints)
 	.then(response => makeJSON(response))
@@ -107,9 +107,9 @@ function filterAllEntries(dataset) {
 		};
 
 		let cleanObject = {
-			disabledaccess: item.disabledaccess,
-			capacity: item.capacity,
 			city: city,
+			disabledaccess: item.disabledaccess,
+			capacity: +item.capacity,
 			road: item.cityInfo.road,
 			postcode: item.cityInfo.postcode,
 			state: item.cityInfo.state
