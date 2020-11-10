@@ -1,7 +1,14 @@
 
 //endpoint naar SPECIFICATIES PARKEERGEBIED + limit van 2000 items
 // stads naam in dataset = data.results[0].components 
-import { data } from './geodata.js'
+import { 
+	select,
+	scaleLinear,
+	max,
+	scaleBand
+ } from 'd3';
+
+import { geoAPI } from './geodata.js';
 
 const endpoints = [
 	"https://opendata.rdw.nl/resource/b3us-f26s.json?$limit=2000", 
@@ -16,7 +23,30 @@ const usefullColumns = [
 ];
 
 //geoData is data I saved locally that I reveived from an API
-const geoData = data;
+const geoData = geoAPI;
+
+//d3 variables
+const d3 = require("d3");
+const svg = d3.select('svg');
+const width = +svg.attr('width');
+const height = +svg.attr('height');
+
+const render = allData => {
+	const xScale = scaleLinear()
+		.domain([0, max(allData, row => row.capacity)])
+		.range([0, width]);
+
+	const yScale = scaleBand ()
+		.domain(allData.map(row => row.city))
+		.range([0, height]);
+
+	svg.selectAll('rect').data(allData)
+		.enter().append('rect')
+			.attr('y', row => yScale(row.city))
+			.attr('width', row => xScale(row.capacity))
+			.attr('height', yScale.bandwidth())
+
+};
 
 getData(endpoints)
 	.then(response => makeJSON(response))
@@ -24,8 +54,14 @@ getData(endpoints)
 	.then(RDWFilteredEntries => mergeObjects(RDWFilteredEntries))
 	.then(RDWSingleObject => filterGeoLocations(RDWSingleObject))
 	.then(RDWFilteredData => mergeGeoData(RDWFilteredData, geoData))
-	.then(allData => filterAllEntries(allData))
-	.then(console.log)
+	.then(mergedAllData => filterAllEntries(mergedAllData))
+	.then(allData => render(allData))
+	// .then(console.log)
+
+
+
+
+///----- vanaf hier alleen functies
 
 //returnt de url met een promise.all 
 function getData(urls) {
