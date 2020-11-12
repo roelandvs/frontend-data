@@ -5,7 +5,9 @@ import {
 	select,
 	scaleLinear,
 	max,
-	scaleBand
+	scaleBand,
+	axisLeft,
+	axisBottom
  } from 'd3';
 
 import { geoAPI } from './geodata.js';
@@ -24,6 +26,7 @@ const usefullColumns = [
 
 //geoData is data I saved locally that I reveived from an API
 const geoData = geoAPI;
+// console.log(geoData);
 
 //d3 variables
 const d3 = require("d3");
@@ -31,21 +34,49 @@ const svg = d3.select('svg');
 const width = +svg.attr('width');
 const height = +svg.attr('height');
 
-const render = allData => {
+const render = data => {
+	const margin = { top: 20, right: 20, bottom: 60, left: 150 };
+	const innerWidth = width - margin.left - margin.right;
+	const innerHeight = height - margin.top - margin.bottom;
+
 	const xScale = scaleLinear()
-		.domain([0, max(allData, row => row.capacity)])
-		.range([0, width]);
+		.domain([0, max(data, row => row.capacity)])
+		.range([0, innerWidth]);
 
-	const yScale = scaleBand ()
-		.domain(allData.map(row => row.city))
-		.range([0, height]);
+	const yScale = scaleBand()
+		.domain(data.map(row => row.city))
+		.range([0, innerHeight])
+		.padding(0.2)
 
-	svg.selectAll('rect').data(allData)
+	//adds margin to group g
+	const g = svg.append('g')
+		.attr('transform', `translate(${margin.left}, ${margin.top})`);
+
+	//call is a function that takes a function, and envokes it with the selection before the .call
+	//y-as
+	g.append('g').call(axisLeft(yScale))
+		.selectAll('.tick line')
+			.remove();
+
+	//x-as
+	g.append('g').call(axisBottom(xScale))
+		.attr('transform', `translate(0, ${innerHeight})`)
+		.append('text')
+			.attr('y', 50)
+			.attr('x', innerHeight / 2 + 80)
+			.attr('class', 'label')
+			.text('Aantal parkeerplaatsen')
+
+
+	g.selectAll('rect').data(data)
 		.enter().append('rect')
 			.attr('y', row => yScale(row.city))
 			.attr('width', row => xScale(row.capacity))
 			.attr('height', yScale.bandwidth())
+			.attr('fill', 'coral')
+			.attr('class', 'rect')
 
+	g.append('text')
 };
 
 getData(endpoints)
@@ -55,13 +86,9 @@ getData(endpoints)
 	.then(RDWSingleObject => filterGeoLocations(RDWSingleObject))
 	.then(RDWFilteredData => mergeGeoData(RDWFilteredData, geoData))
 	.then(mergedAllData => filterAllEntries(mergedAllData))
-	.then(allData => render(allData))
+	.then(iets => mergeSameObject(iets, 'city'))
+	// .then(d3Data => render(d3Data))
 	// .then(console.log)
-
-
-
-
-///----- vanaf hier alleen functies
 
 //returnt de url met een promise.all 
 function getData(urls) {
@@ -102,12 +129,15 @@ function mergeObjects(dataset) {
 		//vergelijkt id's van beide datasets, en als deze overeenkomen bewaard hij ze
 		let locationItem = locationDataset.find(item => item.areaid === entry.areaid);
 
+		// het gaat hier fout, de map returnt in 2 volgordes
+		// console.log(entry);
+
 		if (locationItem) {
 			const mergedItem = {...entry, ...locationItem};
 			return mergedItem;
 		}
 
-	}).filter(entry => entry != undefined);
+	}).filter(entry => entry !== undefined);
 };
 
 function filterGeoLocations(dataset) {
@@ -140,19 +170,43 @@ function filterAllEntries(dataset) {
 			city = item.cityInfo.village;
 		} else {
 			city = item.cityInfo.city;
-		};
+		}
 
 		let cleanObject = {
 			city: city,
+			geometry: item.geometry,
+			geo: item.geo,
 			disabledaccess: item.disabledaccess,
 			capacity: +item.capacity,
-			road: item.cityInfo.road,
+			// road: item.cityInfo.road,
 			postcode: item.cityInfo.postcode,
-			state: item.cityInfo.state
+			state: item.cityInfo.state,
 		};
 
 		return cleanObject;
-	}).filter(item => item.disabledaccess == 1);
+	}).filter(item => item.disabledaccess == 1 && item.capacity != 0);
 };
+
+function mergeSameObject(dataset, key) {
+	let uniqueArray = [{}];
+	let doubleArray = [];
+	// console.log(dataset)
+	dataset.forEach(entry => {		
+		// console.log(entry[key]);
+		// uniqueArray.forEach(item => {
+		// 	if (uniqueArray.length === 1) {
+		// 		uniqueArray.push(entry);
+		// 	} else if (entry[key] != item[key]) {
+		// 		uniqueArray.push(entry);
+		// 		console.log('unique');
+		// 	} else if (entry[key] === item[key]) {
+		// 	 	doubleArray.push(entry);
+		// 		console.log('double');
+		// 	} 
+		// })
+	})
+	// console.log(uniqueArray);
+	// console.log(doubleArray);
+}
 
 
