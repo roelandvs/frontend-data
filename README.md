@@ -63,7 +63,7 @@ https://festive-kepler-c408d6.netlify.app/
 
 ## Sources
 - [D3](https://www.youtube.com/watch?v=NlBt-7PuaLk&ab_channel=CurranKelleher)
-- [Functional Programming](https://medium.com/javascript-scene/master-the-javascript-interview-what-is-functional-programming-7f218c68b3a0#:~:text=Functional%20programming%20(often%20abbreviated%20FP,state%20flows%20through%20pure%20functions.)
+- [Functional Programming](https://medium.com/javascript-scene/master-the-javascript-interview-what-is-functional-programming-7f218c68b3a0#:~:text=Functional%20programming%20(often%20abbreviated%20FP,state%20flows%20through%20pure%20functions)
 - [Map, Filter, Reduce](https://developer.mozilla.org/nl/docs/Web/JavaScript/Reference/Global_Objects/Array/filter)
 - [OpenCage GeoCoding API](https://opencagedata.com/api)
 
