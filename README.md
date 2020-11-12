@@ -27,6 +27,7 @@ Used columns:
 - AreaID
 - GeoDataAsText
 
+After I've filtered the geo locations out of the datasets I fetch the informations about the geo locations using a reversed geocoding API: [OpenCage Geocoding API](https://opencagedata.com/api)
 
 ## Functional Programming
 In this project I try to stick to FP principles. I'm doing this by using:
@@ -56,14 +57,15 @@ Install this project:
 git clone https://github.com/roelandvs/frontend-data.git
 ```
 
-## Research questions
-[Questions](https://github.com/roelandvs/functional-programming/wiki/Parkeer-vragen)
+## Preview of data visualisation
+<img width="700" alt="Schermafbeelding 2020-11-12 om 21 58 21" src="https://user-images.githubusercontent.com/59770136/98995976-75ce9f00-2532-11eb-9074-a59d2339ca48.png">  
+https://festive-kepler-c408d6.netlify.app/
 
 ## Sources
-- [RGB to Hex](https://www.w3docs.com/snippets/javascript/how-to-convert-rgb-to-hex-and-vice-versa.html)
-- [Filter numbers out of string](https://stackoverflow.com/questions/3977256/javascript-how-to-extract-multiple-numbers-from-a-string)
-- [ParseInt](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseInt)
-- [.map()](https://developer.mozilla.org/nl/docs/Web/JavaScript/Reference/Global_Objects/Array/map)
+- [D3](https://www.youtube.com/watch?v=NlBt-7PuaLk&ab_channel=CurranKelleher)
+- [Functional Programming](https://medium.com/javascript-scene/master-the-javascript-interview-what-is-functional-programming-7f218c68b3a0#:~:text=Functional%20programming%20(often%20abbreviated%20FP,state%20flows%20through%20pure%20functions.)
+- [Map, Filter, Reduce](https://developer.mozilla.org/nl/docs/Web/JavaScript/Reference/Global_Objects/Array/filter)
+- [OpenCage GeoCoding API](https://opencagedata.com/api)
 
 Received help from:
 - Vincent van Leeuwen
