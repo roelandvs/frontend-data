@@ -1,4 +1,4 @@
-# functional-programming
+# Frontend-Data
 ## What does this project do?
 This project is made to clean a dataset that contains the hexadecimal notation of the eye color 93 people. I'm converting hex codes without an # to correct hexadecimal notation, and this project also converts RGB notation to Hex notation. 
 
