@@ -86,8 +86,8 @@ getData(endpoints)
 	.then(RDWSingleObject => filterGeoLocations(RDWSingleObject))
 	.then(RDWFilteredData => mergeGeoData(RDWFilteredData, geoData))
 	.then(mergedAllData => filterAllEntries(mergedAllData))
-	.then(iets => mergeSameObject(iets, 'city'))
-	// .then(d3Data => render(d3Data))
+	// .then(iets => mergeSameObject(iets, 'city'))
+	.then(d3Data => render(d3Data))
 	// .then(console.log)
 
 //returnt de url met een promise.all 
@@ -187,26 +187,26 @@ function filterAllEntries(dataset) {
 	}).filter(item => item.disabledaccess == 1 && item.capacity != 0);
 };
 
-function mergeSameObject(dataset, key) {
-	let uniqueArray = [{}];
-	let doubleArray = [];
-	// console.log(dataset)
-	dataset.forEach(entry => {		
-		// console.log(entry[key]);
-		// uniqueArray.forEach(item => {
-		// 	if (uniqueArray.length === 1) {
-		// 		uniqueArray.push(entry);
-		// 	} else if (entry[key] != item[key]) {
-		// 		uniqueArray.push(entry);
-		// 		console.log('unique');
-		// 	} else if (entry[key] === item[key]) {
-		// 	 	doubleArray.push(entry);
-		// 		console.log('double');
-		// 	} 
-		// })
-	})
-	// console.log(uniqueArray);
-	// console.log(doubleArray);
-}
+// function mergeSameObject(dataset, key) {
+// 	let uniqueArray = [{}];
+// 	let doubleArray = [];
+// 	// console.log(dataset)
+// 	dataset.forEach(entry => {		
+// 		// console.log(entry[key]);
+// 		// uniqueArray.forEach(item => {
+// 		// 	if (uniqueArray.length === 1) {
+// 		// 		uniqueArray.push(entry);
+// 		// 	} else if (entry[key] != item[key]) {
+// 		// 		uniqueArray.push(entry);
+// 		// 		console.log('unique');
+// 		// 	} else if (entry[key] === item[key]) {
+// 		// 	 	doubleArray.push(entry);
+// 		// 		console.log('double');
+// 		// 	} 
+// 		// })
+// 	})
+// 	// console.log(uniqueArray);
+// 	// console.log(doubleArray);
+// }
 
 
